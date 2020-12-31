@@ -3,9 +3,9 @@ A generic turn-based game runner.
 """
 import sys
 
-import players_connect
+import players.interactive_player
 from connect_4.board import GameState
-from connect_4.consts import RED_PLAYER, BLACK_PLAYER, TIE, PLAYER_NAME
+from connect_4.consts import RED_PLAYER, BLACK_PLAYER, TIE, PLAYER_NAME, OPPONENT_COLOR
 import utils
 import copy
 
@@ -27,12 +27,12 @@ class GameRunner:
         self.players = {}
 
         # Dynamically importing the players. This allows maximum flexibility and modularity.
-        self.red_player = 'players_connect.{}'.format(red_player)
-        self.black_player = 'players_connect.{}'.format(black_player)
+        self.red_player = 'players.{}'.format(red_player)
+        self.black_player = 'players.{}'.format(black_player)
         __import__(self.red_player)
         __import__(self.black_player)
-        red_is_interactive = sys.modules[self.red_player].Player == players_connect.interactive_player.Player
-        black_is_interactive = sys.modules[self.black_player].Player == players_connect.interactive_player.Player
+        red_is_interactive = sys.modules[self.red_player].Player == players.interactive_player.Player
+        black_is_interactive = sys.modules[self.black_player].Player == players.interactive_player.Player
 
         self.player_move_times = {
             RED_PLAYER: utils.INFINITY if red_is_interactive else self.time_per_turn,
@@ -48,7 +48,7 @@ class GameRunner:
         """
         try:
             player, measured_time = utils.run_with_limited_time(
-                player_class, (self.setup_time, player_color, self.time_per_turn), {}, self.setup_time * 1.5)
+                player_class, (self.setup_time, player_color, self.player_move_times[player_color]), {}, self.setup_time * 1.5)
         except MemoryError:
             return True
 
@@ -79,12 +79,15 @@ class GameRunner:
                 break
             # Get move from player
             move = utils.run_with_limited_time(
-                player.get_move, (copy.deepcopy(board_state), possible_moves), {}, time_limit=self.time_per_turn)
+                player.get_move, (copy.deepcopy(board_state), possible_moves), {}, time_limit=player.time_per_turn)
 
-            possible_winner = board_state.perform_move(move)
-            print('Player ' + repr(player) + ' performed the move: ' + str(move))
+            print(repr(player) + " " + PLAYER_NAME[board_state.curr_player] + ' performed the move: ' + str(move))
+
+            board_state, possible_winner = board_state.perform_move(move)
+
 
             if possible_winner != 0:
+                board_state.draw_board()
                 winner = possible_winner
                 break
             print(f'turn number {counter}')
