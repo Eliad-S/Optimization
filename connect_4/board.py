@@ -2,6 +2,8 @@
 """
 from __future__ import print_function, division
 
+import copy
+
 import numpy as np
 
 from .consts import *
@@ -29,17 +31,18 @@ class GameState:
         Play at given column, if no player provided, calculate which player must play, otherwise force player to play
         Return new grid and winner
         """
+        game_state = copy.deepcopy(self)
         column = move[0]
         if self.can_play(column):
             row = self.board.shape[0] - 1 - np.sum(np.abs(self.board[:, column]), dtype=int)
-            self.board[row, column] = self.curr_player
+            game_state.board[row, column] = self.curr_player
         else:
             raise Exception('Error : Column {} is full'.format(column))
 
         # Updating the current player.
-        winner = self.curr_player if self.is_winner(row, column) else 0
-        self.curr_player = OPPONENT_COLOR[self.curr_player]
-        return winner
+        winner = game_state.curr_player if game_state.is_winner(row, column) else 0
+        game_state.curr_player = OPPONENT_COLOR[game_state.curr_player]
+        return game_state, winner
 
     def draw_board(self):
         print_grid = self.board.astype(str)
@@ -51,7 +54,7 @@ class GameState:
         res = res.replace(']]', ']')
         print(' ' + res)
         print('  ' + ' '.join('0123456'))
-        print("\n" + PLAYER_NAME[self.curr_player] + " Player Turn!\n\n")
+        print("\n" + PLAYER_NAME[self.curr_player] + " Turn!\n\n")
 
     def __hash__(self):
         """This object can be inserted into a set or as dict key. NOTICE: Changing the object after it has been inserted
