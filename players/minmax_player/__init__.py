@@ -1,6 +1,7 @@
 # ===============================================================================
 # Imports
 # ===============================================================================
+import copy
 
 import abstract
 from utils import MiniMaxWithAlphaBetaPruning, INFINITY, run_with_limited_time, ExceededTimeError, count_sequence
@@ -50,7 +51,7 @@ class Player(abstract.AbstractPlayer):
                 break
             try:
                 (alpha, move), run_time = run_with_limited_time(
-                    minimax.search, (game_state, current_depth, -INFINITY, INFINITY, True), {},
+                    minimax.search, (copy.deepcopy(game_state), current_depth, -INFINITY, INFINITY, True), {},
                     self.time_remaining_in_turn - (time.process_time() - self.clock))
             except (ExceededTimeError, MemoryError):
                 print('no more time, achieved depth {}'.format(current_depth))

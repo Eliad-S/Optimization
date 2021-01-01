@@ -24,6 +24,6 @@ class Player(abstract.AbstractPlayer):
                 pass
 
     def __repr__(self):
-        return '{} {}'.format(abstract.AbstractPlayer.__repr__(self), 'interactive')
+        return 'interactive'
 
 
