@@ -112,3 +112,5 @@ if __name__ == '__main__':
 For example: {0} 2 10 interactive random_player
 Please read the docs in the code for more info.""".
               format(sys.argv[0]))
+
+        
