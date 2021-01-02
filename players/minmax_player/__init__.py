@@ -52,7 +52,7 @@ class Player(abstract.AbstractPlayer):
             #     break
             try:
                 (alpha, move), run_time = run_with_limited_time(
-                    minimax.search, (copy.deepcopy(game_state), current_depth, -INFINITY, INFINITY, True), {},
+                    minimax.search, (game_state, current_depth, -INFINITY, INFINITY, True), {},
                     self.time_remaining_in_turn - (time.process_time() - self.clock))
             except (ExceededTimeError, MemoryError):
                 print('no more time, achieved depth {}'.format(current_depth))
@@ -89,17 +89,19 @@ class Player(abstract.AbstractPlayer):
         player_fours = count_sequence(board, player, 4)
         player_threes = count_sequence(board, player, 3)
         player_twos = count_sequence(board, player, 2)
-        player_score = player_fours * 99999 + player_threes * 999 + player_twos * 99
+        player_score = player_threes * 999 + player_twos * 9
 
         opponent_fours = count_sequence(board, opponent, 4)
         opponent_threes = count_sequence(board, opponent, 3)
         opponent_twos = count_sequence(board, opponent, 2)
-        opponent_score = opponent_fours * 99999 + opponent_threes * 999 + opponent_twos * 99
+        opponent_score = opponent_threes * 999 + opponent_twos * 9
 
         if opponent_fours > 0:
             # This means that the current player lost the game
             # So return the biggest negative value => -infinity
-            return float('-inf')
+            return -INFINITY
+        elif player_fours > 0:
+            return INFINITY
         else:
             # Return the playerScore minus the opponentScore
             return player_score - opponent_score

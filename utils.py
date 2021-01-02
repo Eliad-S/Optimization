@@ -80,6 +80,13 @@ def count_sequence(board, player, length):
             else:
                 break
         if count >= length:
+            if row >= 1 and row+length < BOARD_ROWS:
+                if board[row-1][col] == 0 and board[row+length][col] == 0:
+                    return 3
+                elif board[row-1][col] == 0 or board[row+length][col] == 0:
+                    return 2
+                else:
+                    return 1
             return 1
         else:
             return 0
@@ -94,6 +101,13 @@ def count_sequence(board, player, length):
             else:
                 break
         if count >= length:
+            if col >= 1 and col + length < BOARD_ROWS:
+                if board[row][col-1] == 0 and board[row][col+length] == 0:
+                    return 3
+                elif board[row][col-1] == 0 or board[row][col+length] == 0:
+                    return 2
+                else:
+                    return 1
             return 1
         else:
             return 0
