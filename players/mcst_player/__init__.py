@@ -177,7 +177,7 @@ class Player(abstract.AbstractPlayer):
         self.clock = time.process_time()
         self.time_per_turn = time_per_turn
         self.mcts = None
-        for i in range(200):
+        for i in range(1):
             self.mcts = train_mcts_once(self.mcts)
 
     def get_move(self, board_state, possible_moves):

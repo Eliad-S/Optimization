@@ -24,7 +24,8 @@ class Player(abstract.AbstractPlayer):
         # Taking a spare time of 0.05 seconds.
 
     def get_move(self, game_state, possible_moves):
-        self.time_remaining_in_turn = self.time_per_turn - 0.2
+        game_state = copy.deepcopy(game_state)
+        self.time_remaining_in_turn = self.time_per_turn - 0.05
         self.clock = time.process_time()
         if len(possible_moves) == 1:
             return possible_moves[0]
@@ -47,8 +48,8 @@ class Player(abstract.AbstractPlayer):
                 prev_alpha,
                 best_move))
 
-            if current_depth > self.max_depth:
-                break
+            # if current_depth > self.max_depth:
+            #     break
             try:
                 (alpha, move), run_time = run_with_limited_time(
                     minimax.search, (copy.deepcopy(game_state), current_depth, -INFINITY, INFINITY, True), {},
