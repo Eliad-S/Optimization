@@ -79,7 +79,7 @@ class GameRunner:
                 break
             # Get move from player
             move = utils.run_with_limited_time(
-                player.get_move, (board_state, possible_moves), {}, time_limit=player.time_per_turn)
+                player.get_move, (board_state, possible_moves), {}, time_limit=player.time_per_turn * 1.5)
 
             print(repr(player) + " " + PLAYER_NAME[board_state.curr_player] + ' performed the move: ' + str(move))
 
