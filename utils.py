@@ -9,7 +9,8 @@ import copy
 
 from connect_4.consts import BOARD_ROWS, BOARD_COLS, OPPONENT_COLOR
 
-INFINITY = float(6000)
+INFINITY_TIME = float(6000)
+INFINITY = float('inf')
 
 
 class ExceededTimeError(RuntimeError):
@@ -204,6 +205,8 @@ class MiniMaxWithAlphaBetaPruning:
             best_move_utility = -INFINITY
             for move in next_moves:
                 new_state, _ = game_state.perform_move((move, 0))
+                # print(new_state.board)
+
                 minimax_value, _ = self.search(new_state, depth - 1, alpha, beta, False)
                 alpha = max(alpha, minimax_value)
                 if minimax_value > best_move_utility:
@@ -216,6 +219,8 @@ class MiniMaxWithAlphaBetaPruning:
         else:
             for move in next_moves:
                 new_state, _ = game_state.perform_move((move, 0))
+                # print(new_state.board)
+
                 beta = min(beta, self.search(new_state, depth - 1, alpha, beta, True)[0])
                 if beta <= alpha or self.no_more_time():
                     break

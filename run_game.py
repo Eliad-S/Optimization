@@ -35,8 +35,8 @@ class GameRunner:
         black_is_interactive = sys.modules[self.black_player].Player == players.interactive_player.Player
 
         self.player_move_times = {
-            RED_PLAYER: utils.INFINITY if red_is_interactive else self.time_per_turn,
-            BLACK_PLAYER: utils.INFINITY if black_is_interactive else self.time_per_turn
+            RED_PLAYER: utils.INFINITY_TIME if red_is_interactive else self.time_per_turn,
+            BLACK_PLAYER: utils.INFINITY_TIME if black_is_interactive else self.time_per_turn
         }
 
     def setup_player(self, player_class, player_color):

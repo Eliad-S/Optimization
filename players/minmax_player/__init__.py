@@ -48,8 +48,6 @@ class Player(abstract.AbstractPlayer):
                 prev_alpha,
                 best_move))
 
-            # if current_depth > self.max_depth:
-            #     break
             try:
                 (alpha, move), run_time = run_with_limited_time(
                     minimax.search, (game_state, current_depth, -INFINITY, INFINITY, True), {},
