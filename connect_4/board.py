@@ -2,14 +2,14 @@
 """
 from __future__ import print_function, division
 
-import copy
+from copy import copy, deepcopy
 
 import numpy as np
 
 from .consts import *
 
 
-class GameState:
+class GameState(object):
     def __init__(self):
         """ Initializing the board and current player.
         """
@@ -34,18 +34,17 @@ class GameState:
         Return new grid and winner
         """
         self.move = move[0]
-        game_state = copy.deepcopy(self)
         column = move[0]
         if self.can_play(column):
             row = self.board.shape[0] - 1 - np.sum(np.abs(self.board[:, column]), dtype=int)
-            game_state.board[row, column] = self.curr_player
+            self.board[row, column] = self.curr_player
         else:
             raise Exception('Error : Column {} is full'.format(column))
 
         # Updating the current player.
-        winner = game_state.curr_player if game_state.is_winner(row, column) else 0
-        game_state.curr_player = OPPONENT_COLOR[game_state.curr_player]
-        return game_state, winner
+        winner = self.curr_player if self.is_winner(row, column) else 0
+        self.curr_player = OPPONENT_COLOR[self.curr_player]
+        return self, winner
 
     def draw_board(self):
         print_grid = self.board.astype(str)
@@ -72,6 +71,13 @@ class GameState:
 
     def is_winner(self,row,col):
         return has_won(self.board, self.curr_player, row, col)
+
+    def cp(self):
+        cp = copy(self)
+        cp.board = deepcopy(self.board)
+        cp.move = deepcopy(self.move)
+        cp.curr_player = deepcopy(self.curr_player)
+        return cp
 
 
 def has_won(board, player, row, column):

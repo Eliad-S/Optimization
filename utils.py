@@ -204,7 +204,8 @@ class MiniMaxWithAlphaBetaPruning:
             selected_move = next_moves[0]
             best_move_utility = -INFINITY
             for move in next_moves:
-                new_state, _ = game_state.perform_move((move, 0))
+                new_state = game_state.cp()
+                new_state.perform_move((move, 0))
                 # print(new_state.board)
 
                 minimax_value, _ = self.search(new_state, depth - 1, alpha, beta, False)
@@ -218,9 +219,8 @@ class MiniMaxWithAlphaBetaPruning:
 
         else:
             for move in next_moves:
-                new_state, _ = game_state.perform_move((move, 0))
-                # print(new_state.board)
-
+                new_state = game_state.cp()
+                new_state.perform_move((move, 0))
                 beta = min(beta, self.search(new_state, depth - 1, alpha, beta, True)[0])
                 if beta <= alpha or self.no_more_time():
                     break

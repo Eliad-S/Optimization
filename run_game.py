@@ -104,7 +104,9 @@ class GameRunner:
             print('The winner is {}'.format(PLAYER_NAME[winner]))
 
 
+
 if __name__ == '__main__':
+
     try:
         GameRunner(*sys.argv[1:]).run()
     except TypeError:
