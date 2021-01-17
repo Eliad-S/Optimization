@@ -48,7 +48,8 @@ class GameRunner:
         """
         try:
             player, measured_time = utils.run_with_limited_time(
-                player_class, (self.setup_time, player_color, self.player_move_times[player_color]), {}, self.setup_time * 1.5)
+                player_class, (self.setup_time, player_color, self.player_move_times[player_color]), {},
+                self.setup_time * 1.5)
         except MemoryError:
             return True
 
@@ -85,7 +86,6 @@ class GameRunner:
 
             board_state, possible_winner = board_state.perform_move(move)
 
-
             if possible_winner != 0:
                 board_state.draw_board()
                 winner = possible_winner
@@ -104,7 +104,6 @@ class GameRunner:
             print('The winner is {}'.format(PLAYER_NAME[winner]))
 
 
-
 if __name__ == '__main__':
 
     try:
@@ -114,5 +113,3 @@ if __name__ == '__main__':
 For example: {0} 2 10 interactive random_player
 Please read the docs in the code for more info.""".
               format(sys.argv[0]))
-
-        
